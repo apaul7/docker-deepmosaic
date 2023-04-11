@@ -14,7 +14,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
 COPY reqs.txt /tmp/
 RUN conda config --add channels bioconda \
     && conda config --add channels conda-forge \
-    && conda env create -n deepmosaic --yes bedtools pandas pysam pyrotch argparse \
+    && conda env create -n deepmosaic -f /tmp/reqs.txt \
     && pip install tables efficientnet_pytorch
 
 WORKDIR /opt
