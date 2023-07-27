@@ -11,22 +11,23 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     wget \
     && rm -rf /var/lib/apt/lists/*
 
-COPY reqs.txt /tmp/
-RUN conda config --add channels bioconda \
-    && conda config --add channels conda-forge \
-    && conda env create -n deepmosaic -f /tmp/reqs.txt \
-    && pip install tables efficientnet_pytorch
-
 WORKDIR /opt
-
-# below new
 RUN wget https://github.com/git-lfs/git-lfs/releases/download/v3.3.0/git-lfs-linux-amd64-v3.3.0.tar.gz \
     && tar -zxf git-lfs-linux-amd64-v3.3.0.tar.gz \
     && rm git-lfs-linux-amd64-v3.3.0.tar.gz \
     && cd git-lfs-3.3.0 \
     && ./install.sh \
     && cd .. \
-    && git clone --recursive https://github.com/Virginiaxu/DeepMosaic \
     && rm -rf git-lfs-4.3.-1
 
+ENV DEEPMOSAIC_VERSION=v1.1.0
+RUN git clone --recursive --branch ${DEEPMOSAIC_VERSION} https://github.com/Virginiaxu/DeepMosaic
+
+RUN conda update -n base -c defaults conda
+RUN conda create -n DeepMosaic python=3.7
+RUN conda install -n DeepMosaic pandas pip
+RUN conda install -n DeepMosaic matplotlib
+RUN conda install -n DeepMosaic pytorch
+RUN conda install -n DeepMosaic pip
+RUN /opt/conda/envs/DeepMosaic/bin/python -m pip install pysam tables efficientnet_pytorch scipy
 
