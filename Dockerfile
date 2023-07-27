@@ -30,4 +30,5 @@ RUN conda install -n DeepMosaic matplotlib
 RUN conda install -n DeepMosaic pytorch
 RUN conda install -n DeepMosaic pip
 RUN /opt/conda/envs/DeepMosaic/bin/python -m pip install pysam tables efficientnet_pytorch scipy
+RUN conda install -n DeepMosaic -c bioconda bedtools
 
